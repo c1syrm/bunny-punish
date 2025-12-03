@@ -24,7 +24,7 @@ body {
   transition: box-shadow 0.2s;
 }
 
-/* 抽奖中的卡片灯光 */
+/* 抽奖时卡片灯光 */
 .card.spinning {
   animation: cardGlow 0.8s ease-in-out infinite;
 }
@@ -52,7 +52,7 @@ body {
   overflow: hidden;
 }
 
-/* 普通格子 */
+/* 外圈格子 */
 .cell {
   border: 1px solid #cfe8ff;
   height: 60px;
@@ -76,7 +76,7 @@ body {
   background: white;
 }
 
-/* 高亮格子的旋转+闪光效果 */
+/* 高亮格子的旋转+闪光 */
 .flash {
   background: #fff3b0 !important;
   border-color: #ffd35b;
@@ -113,26 +113,25 @@ body {
   <div class="grid">
 
     <!-- 第 1 行 -->
-    <div class="cell">吃好吃的</div>         <!-- index 0 -->
-    <div class="cell">买零食</div>           <!-- index 1 -->
-    <div class="cell">朋友圈道歉</div>       <!-- index 2 -->
-    <div class="cell">任选一个</div>         <!-- index 3 -->
+    <div class="cell">吃好吃的</div>         <!-- 0 -->
+    <div class="cell">买零食</div>           <!-- 1 -->
+    <div class="cell">朋友圈道歉</div>       <!-- 2 -->
+    <div class="cell">任选一个</div>         <!-- 3 -->
 
     <!-- 第 2 行 -->
-    <div class="cell">喝奶茶</div>           <!-- index 4 -->
-    <!-- 中间 2×2，一个元素跨两行两列 -->
-    <div class="center-emoji">🐰</div>        <!-- 只这一个，占 2×2 -->
-    <div class="cell">转账52元</div>         <!-- index 5 -->
+    <div class="cell">喝奶茶</div>           <!-- 4 -->
+    <div class="center-emoji">🐰</div>
+    <div class="cell">转账52元</div>         <!-- 5 -->
 
     <!-- 第 3 行 -->
-    <div class="cell">零食</div>       <!-- index 6 -->
-    <div class="cell">再来一次</div>         <!-- index 7 -->
+    <div class="cell">零食</div>       <!-- 6 -->
+    <div class="cell">买衣服</div>         <!-- 7 -->
 
     <!-- 第 4 行 -->
-    <div class="cell">唱征服</div>           <!-- index 8 -->
-    <div class="cell">打屁股52</div>       <!-- index 9 -->
-    <div class="cell">全部来一遍！</div>     <!-- index10 -->
-    <div class="cell">买衣服</div>         <!-- index11 -->
+    <div class="cell">再来一次</div>         <!-- 8 -->
+    <div class="cell">唱歌</div>       <!-- 9 -->
+    <div class="cell">打屁股</div>       <!--10 -->
+    <div class="cell">全部来一遍！</div>     <!--11 -->
 
   </div>
 
@@ -143,39 +142,39 @@ body {
 let spinning = false;
 
 function start() {
-  if (spinning) return; // 防止连点
+  if (spinning) return;
   spinning = true;
 
   const card = document.getElementById('card');
   const btn  = document.getElementById('btn');
   const allCells = document.querySelectorAll('.cell');
 
-  // 外圈顺时针的顺序（注意是 .cell 在 DOM 中的下标）
-  // 布局索引：
-  // 0:吃好吃的  1:买零食  2:朋友圈道歉  3:任选一个
-  // 4:喝奶茶    5:转账52元
-  // 6:小零食礼包 7:再来一次
-  // 8:唱征服    9:打屁股52下  10:全部来一遍！  11:买新衣服
+  // .cell 顺序：
+  // 0 吃好吃的      1 买零食       2 朋友圈道歉    3 任选一个
+  // 4 喝奶茶        5 转账52元
+  // 6 小零食礼包    7 买新衣服
+  // 8 再来一次      9 跪下唱征服    10 打屁股52下   11 全部来一遍！
   //
-  // 外圈顺时针：上→右→下→左
+  // 外圈顺时针：上 → 右 → 下 → 左
   const orderIndex = [
-    0, 1, 2, 3,   // 上边
-    5,            // 右上往下
-    11,10,9,8,    // 底边 从右到左
-    6,4           // 左下 → 左上
+    0, 1, 2, 3,   // 上
+    5, 7,         // 右
+    11,10,9,8,    // 下
+    6,4           // 左
   ];
 
   const cells = orderIndex.map(i => allCells[i]);
 
-  // 清理旧状态
+  // 清除旧高亮
   cells.forEach(c => c.classList.remove('flash'));
   btn.disabled = true;
   btn.textContent = '抽奖中…';
   card.classList.add('spinning');
 
-  const oneRound = cells.length; // 12 格
-  const extra = 4 + Math.floor(Math.random() * 6); // 多转几格
-  const totalSteps = oneRound + extra;
+  const n = cells.length;      // 一圈的格子数（12）
+  const laps = 2;              // 至少转几圈：想要 3 圈就改成 3
+  const finalIndex = Math.floor(Math.random() * n); // 最终停在哪个格子
+  const totalSteps = laps * n + finalIndex + 1;     // 确保转足 laps 圈再停
 
   let step = 0;
   let index = 0;
@@ -185,8 +184,9 @@ function start() {
     cells[index].classList.add('flash');
 
     step++;
+
     if (step >= totalSteps) {
-      // 停下
+      // 已经亮过最后一个格子，结束
       spinning = false;
       btn.disabled = false;
       btn.textContent = '随机抽一个惩罚';
@@ -194,12 +194,12 @@ function start() {
       return;
     }
 
-    index = (index + 1) % cells.length;
+    index = (index + 1) % n;
 
-    // 先快后慢：progress 越大，间隔越大
-    const progress = step / totalSteps; 
-    const minDelay = 60;   // 最快
-    const maxDelay = 260;  // 最慢
+    // 先快后慢：越到后面间隔越大
+    const progress = step / totalSteps;     // 0 ~ 1
+    const minDelay = 50;                    // 最快
+    const maxDelay = 260;                   // 最慢
     const delay = minDelay + (maxDelay - minDelay) * (progress * progress);
 
     setTimeout(spin, delay);
