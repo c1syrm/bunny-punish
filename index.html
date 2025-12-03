@@ -76,7 +76,7 @@ body {
   background: white;
 }
 
-/* 高亮格子的旋转+闪光 */
+/* 高亮格子：旋转+闪光 */
 .flash {
   background: #fff3b0 !important;
   border-color: #ffd35b;
@@ -129,7 +129,7 @@ body {
 
     <!-- 第 4 行 -->
     <div class="cell">再来一次</div>         <!-- 8 -->
-    <div class="cell">唱歌</div>       <!-- 9 -->
+    <div class="cell">唱征服</div>       <!-- 9 -->
     <div class="cell">打屁股</div>       <!--10 -->
     <div class="cell">全部来一遍！</div>     <!--11 -->
 
@@ -165,16 +165,18 @@ function start() {
 
   const cells = orderIndex.map(i => allCells[i]);
 
-  // 清除旧高亮
+  // 清空旧高亮
   cells.forEach(c => c.classList.remove('flash'));
   btn.disabled = true;
   btn.textContent = '抽奖中…';
   card.classList.add('spinning');
 
-  const n = cells.length;      // 一圈的格子数（12）
-  const laps = 2;              // 至少转几圈：想要 3 圈就改成 3
-  const finalIndex = Math.floor(Math.random() * n); // 最终停在哪个格子
-  const totalSteps = laps * n + finalIndex + 1;     // 确保转足 laps 圈再停
+  const n = cells.length;               // 一圈 12 格
+  const laps = 2 + Math.floor(Math.random() * 3);
+  // laps = 2,3,4，至少两圈，多的时候会转到你怀疑人生😂
+
+  const extra = Math.floor(Math.random() * n); // 额外多转 0~11 格
+  const totalSteps = laps * n + extra;         // 总步数 = 多圈 + 随机偏移
 
   let step = 0;
   let index = 0;
@@ -186,7 +188,7 @@ function start() {
     step++;
 
     if (step >= totalSteps) {
-      // 已经亮过最后一个格子，结束
+      // 结束时当前这个格子就是随机结果
       spinning = false;
       btn.disabled = false;
       btn.textContent = '随机抽一个惩罚';
@@ -196,10 +198,10 @@ function start() {
 
     index = (index + 1) % n;
 
-    // 先快后慢：越到后面间隔越大
-    const progress = step / totalSteps;     // 0 ~ 1
-    const minDelay = 50;                    // 最快
-    const maxDelay = 260;                   // 最慢
+    // 先快后慢
+    const progress = step / totalSteps; // 0~1
+    const minDelay = 50;
+    const maxDelay = 260;
     const delay = minDelay + (maxDelay - minDelay) * (progress * progress);
 
     setTimeout(spin, delay);
