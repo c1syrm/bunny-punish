@@ -14,6 +14,176 @@ body {
   padding: 20px;
 }
 
+/* 卡片 */
+.card {
+  width: 360px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* 标题 */
+.title {
+  text-align: center;
+  font-size: 22px;
+  color: #4a9be6;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* 网格布局 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 2px solid #4a9be6;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* 单格 */
+.cell {
+  border: 1px solid #cfe8ff;
+  height: 60px;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  background: white;
+  transition: all .15s ease-out;
+}
+
+/* 中间 emoji 占 2×2 */
+.center-emoji {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+}
+
+/* 抽奖闪烁效果 */
+.flash {
+  background: #fff3b0 !important;
+  transform: scale(1.10);
+  box-shadow: 0 0 10px #ffe47a;
+  border-color: #ffd35b;
+  font-weight: 700;
+}
+
+/* 按钮 */
+.button {
+  margin-top: 18px;
+  width: 100%;
+  background: #4a9be6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 600;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+  <div class="title">跟娄莉吵架的惩罚</div>
+
+  <div class="grid">
+
+    <!-- 顺时针外圈格子（位置固定） -->
+
+    <div class="cell">吃好吃的</div>         <!-- 1 -->
+    <div class="cell">买零食</div>           <!-- 2 -->
+    <div class="cell">朋友圈道歉</div>       <!-- 3 -->
+    <div class="cell">任选一个</div>         <!-- 4 -->
+
+    <div class="cell">喝奶茶</div>           <!-- 16 -->
+    <div class="center-emoji">🐰</div>        <!-- 中间 emoji -->
+    <div class="center-emoji"></div>         
+    <div class="cell">转账52元</div>         <!-- 5 -->
+
+    <div class="cell">小零食礼包</div>       <!-- 15 -->
+    <div class="center-emoji"></div>
+    <div class="center-emoji"></div>
+    <div class="cell">买新衣服</div>         <!-- 6 -->
+
+    <div class="cell">再来一次</div>         <!-- 14 -->
+    <div class="cell">跪下唱征服</div>       <!-- 13 -->
+    <div class="cell">打屁股52下</div>       <!-- 12 -->
+    <div class="cell">全部来一遍！</div>     <!-- 11 -->
+
+  </div>
+
+  <button class="button" onclick="start()">随机抽一个惩罚</button>
+</div>
+
+<script>
+function start() {
+  // 外圈顺时针 12 格子的顺序（手动指定）
+  let order = [
+    0, 1, 2, 3,    // 上排 1→4
+    7,            // 右上角往下 5
+    11,           // 右下角 6
+    10, 9, 8,     // 下排逆向 7→9
+    4,            // 左下角 10
+    12            // 左上角 11（再回到开头前一格）
+  ];
+
+  // 收集外圈格子
+  let allCells = document.querySelectorAll(".cell");
+  let cells = order.map(i => allCells[i]);
+
+  // 清空旧亮光
+  cells.forEach(c => c.classList.remove("flash"));
+
+  let interval = 90;               // 转动速度
+  let oneRound = cells.length;     // 一圈 = 12 格
+  let extra = 3 + Math.floor(Math.random() * 5);
+  let total = oneRound + extra;    // 转一圈 + 随机几格
+
+  let step = 0;
+  let index = 0;
+
+  let timer = setInterval(() => {
+    cells.forEach(c => c.classList.remove("flash"));
+    cells[index].classList.add("flash");
+
+    index = (index + 1) % cells.length;
+    step++;
+
+    if (step >= total) {
+      clearInterval(timer);
+
+      // 最终停下的位置
+      let finalIndex = (index - 1 + cells.length) % cells.length;
+      cells.forEach(c => c.classList.remove("flash"));
+      cells[finalIndex].classList.add("flash");
+    }
+  }, interval);
+}
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>惩罚</title>
+
+<style>
+body {
+  font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei";
+  background: linear-gradient(180deg, #dff4ff 0%, #bde3ff 100%);
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
 /* 主卡片 */
 .card {
   width: 360px;
