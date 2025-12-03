@@ -14,10 +14,10 @@ body {
   padding: 20px;
 }
 
-/* 卡片 */
+/* 主卡片 */
 .card {
   width: 360px;
-  background: white;
+  background: #ffffff;
   border-radius: 22px;
   padding: 20px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
@@ -41,36 +41,37 @@ body {
   overflow: hidden;
 }
 
-/* 小格子 */
+/* 普通格子 */
 .cell {
   border: 1px solid #cfe8ff;
   height: 60px;
   font-size: 14px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
   background: white;
-  transition: all 0.15s ease;
+  transition: all 0.15s ease-out;
 }
 
-/* 中间四格合并成一个大表情 */
+/* 中间四格合并成一个 emoji */
 .center-emoji {
   grid-column: span 2;
   grid-row: span 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 70px;
+  font-size: 70px;   /* 中间表情大小 */
   background: white;
 }
 
 /* 抽奖闪烁效果 */
 .flash {
   background: #fff3b0 !important;
-  transform: scale(1.08);
+  transform: scale(1.10);
   box-shadow: 0 0 10px #ffe47a;
-  font-weight: 600;
   border-color: #ffd35b;
+  font-weight: 700;
 }
 
 /* 按钮 */
@@ -83,15 +84,18 @@ body {
   padding: 12px;
   border-radius: 14px;
   font-size: 17px;
+  font-weight: 600;
 }
 </style>
+
 </head>
 <body>
 
 <div class="card">
-  <div class="title">跟娄莉吵架惩罚</div>
+  <div class="title">跟娄莉吵架的惩罚</div>
 
   <div class="grid" id="grid">
+
     <!-- 第一行 -->
     <div class="cell">吃好吃的</div>
     <div class="cell">买零食</div>
@@ -101,7 +105,7 @@ body {
     <!-- 第二行 -->
     <div class="cell">喝奶茶</div>
 
-    <!-- 中间 2×2 Emoji -->
+    <!-- 中间四格合成一个 emoji（可改成任意表情） -->
     <div class="center-emoji">🐰</div>
 
     <div class="cell">转账52元</div>
@@ -115,6 +119,7 @@ body {
     <div class="cell">跪下唱征服</div>
     <div class="cell">打屁股52下</div>
     <div class="cell">全部来一遍！</div>
+
   </div>
 
   <button class="button" onclick="start()">随机抽一个惩罚</button>
@@ -125,22 +130,32 @@ function start() {
   let cells = Array.from(document.querySelectorAll(".cell"));
   cells.forEach(c => c.classList.remove("flash"));
 
-  let duration = 500 + Math.random() * 300;
-  let interval = 60;
+  let interval = 80;                 // 每格切换速度
+  let oneRound = cells.length;       // 一圈
+  let extra = 3 + Math.floor(Math.random() * 5); 
+  let totalSteps = oneRound + extra; // 跑完一圈再多跑几格
+
   let index = 0;
+  let step = 0;
 
   let timer = setInterval(() => {
+
     cells.forEach(c => c.classList.remove("flash"));
     cells[index].classList.add("flash");
-    index = (index + 1) % cells.length;
-  }, interval);
 
-  setTimeout(() => {
-    clearInterval(timer);
-    let final = Math.floor(Math.random() * cells.length);
-    cells.forEach(c => c.classList.remove("flash"));
-    cells[final].classList.add("flash");
-  }, duration);
+    index = (index + 1) % cells.length;
+    step++;
+
+    if (step >= totalSteps) {
+      clearInterval(timer);
+
+      // 最终停下的位置（刚刚闪过的格子）
+      let finalIndex = (index - 1 + cells.length) % cells.length;
+      cells.forEach(c => c.classList.remove("flash"));
+      cells[finalIndex].classList.add("flash");
+    }
+
+  }, interval);
 }
 </script>
 
