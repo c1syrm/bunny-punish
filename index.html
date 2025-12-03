@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>惩罚</title>
+
+<style>
+body {
+  font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei";
+  background: linear-gradient(180deg, #dff4ff 0%, #bde3ff 100%);
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* 卡片 */
+.card {
+  width: 360px;
+  background: white;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* 标题 */
+.title {
+  text-align: center;
+  font-size: 22px;
+  color: #4a9be6;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* 网格 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 2px solid #4a9be6;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* 小格子 */
+.cell {
+  border: 1px solid #cfe8ff;
+  height: 60px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  transition: all 0.15s ease;
+}
+
+/* 中间四格合并成一个大表情 */
+.center-emoji {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+  background: white;
+}
+
+/* 抽奖闪烁效果 */
+.flash {
+  background: #fff3b0 !important;
+  transform: scale(1.08);
+  box-shadow: 0 0 10px #ffe47a;
+  font-weight: 600;
+  border-color: #ffd35b;
+}
+
+/* 按钮 */
+.button {
+  margin-top: 18px;
+  width: 100%;
+  background: #4a9be6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 17px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="title">跟娄莉吵架惩罚</div>
+
+  <div class="grid" id="grid">
+    <!-- 第一行 -->
+    <div class="cell">吃好吃的</div>
+    <div class="cell">买零食</div>
+    <div class="cell">朋友圈道歉</div>
+    <div class="cell">任选一个</div>
+
+    <!-- 第二行 -->
+    <div class="cell">喝奶茶</div>
+
+    <!-- 中间 2×2 Emoji -->
+    <div class="center-emoji">🐰</div>
+
+    <div class="cell">转账52元</div>
+
+    <!-- 第三行 -->
+    <div class="cell">小零食礼包</div>
+    <div class="cell">买新衣服</div>
+
+    <!-- 第四行 -->
+    <div class="cell">再来一次</div>
+    <div class="cell">跪下唱征服</div>
+    <div class="cell">打屁股52下</div>
+    <div class="cell">全部来一遍！</div>
+  </div>
+
+  <button class="button" onclick="start()">随机抽一个惩罚</button>
+</div>
+
+<script>
+function start() {
+  let cells = Array.from(document.querySelectorAll(".cell"));
+  cells.forEach(c => c.classList.remove("flash"));
+
+  let duration = 500 + Math.random() * 300;
+  let interval = 60;
+  let index = 0;
+
+  let timer = setInterval(() => {
+    cells.forEach(c => c.classList.remove("flash"));
+    cells[index].classList.add("flash");
+    index = (index + 1) % cells.length;
+  }, interval);
+
+  setTimeout(() => {
+    clearInterval(timer);
+    let final = Math.floor(Math.random() * cells.length);
+    cells.forEach(c => c.classList.remove("flash"));
+    cells[final].classList.add("flash");
+  }, duration);
+}
+</script>
+
+</body>
+</html>
