@@ -203,7 +203,6 @@ body {
 <div class="card" id="card">
   <div class="title-wrap">
     <div class="title">跟娄莉吵架的惩罚</div>
-    <div class="subtitle">至少要转两圈，小蛇选一个结局给你 🐍</div>
   </div>
 
   <div class="grid-wrap">
@@ -220,13 +219,13 @@ body {
       <div class="cell">转账52元</div>        <!-- 5 -->
 
       <!-- 第三行 -->
-      <div class="cell">小零食礼包</div>      <!-- 6 -->
+      <div class="cell">零食</div>      <!-- 6 -->
       <div class="cell">买新衣服</div>        <!-- 7 -->
 
       <!-- 第四行 -->
       <div class="cell">再来一次</div>        <!-- 8 -->
-      <div class="cell">跪下唱征服</div>      <!-- 9 -->
-      <div class="cell">打屁股52下</div>      <!-- 10 -->
+      <div class="cell">做饭</div>      <!-- 9 -->
+      <div class="cell">打屁股</div>      <!-- 10 -->
       <div class="cell">全部来一遍！</div>    <!-- 11 -->
     </div>
   </div>
@@ -285,7 +284,7 @@ function start() {
       btn.disabled = false;
       btn.textContent = "再转一次";
       card.classList.remove("spinning");
-      resultEl.innerHTML = `这次小蛇选的是：<span>${text}</span>`;
+      resultEl.innerHTML = `这次娄莉选的是：<span>${text}</span>`;
       spinning = false;
       return;
     }
