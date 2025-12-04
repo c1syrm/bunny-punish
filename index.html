@@ -1,71 +1,108 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>惩罚</title>
 
 <style>
+/* ====== 整体背景 ====== */
 body {
-  font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei";
-  background: linear-gradient(180deg, #dff4ff 0%, #bde3ff 100%);
+  margin: 0;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial,
+    "PingFang SC", "Microsoft YaHei", sans-serif;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 20px;
+  align-items: flex-start;
+  background: radial-gradient(circle at top, #fdfbff 0%, #cde9ff 40%, #9fd3ff 100%);
 }
 
-/* 卡片 */
+/* ====== 主卡片 ====== */
 .card {
   width: 360px;
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  transition: box-shadow 0.2s;
+  max-width: 100%;
+  background: #ffffffcc;
+  border-radius: 24px;
+  padding: 22px 20px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-/* 抽奖时卡片灯光 */
+/* 抽奖时整体发光 */
 .card.spinning {
-  animation: cardGlow 0.8s ease-in-out infinite;
+  animation: cardGlow 0.9s ease-in-out infinite;
 }
+
 @keyframes cardGlow {
-  0%   { box-shadow: 0 0 10px rgba(74,155,230,0.3); }
-  50%  { box-shadow: 0 0 20px rgba(74,155,230,0.7); }
-  100% { box-shadow: 0 0 10px rgba(74,155,230,0.3); }
+  0% {
+    box-shadow: 0 12px 24px rgba(57, 141, 238, 0.2);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 18px 40px rgba(57, 141, 238, 0.45);
+    transform: translateY(-2px);
+  }
+  100% {
+    box-shadow: 0 12px 24px rgba(57, 141, 238, 0.2);
+    transform: translateY(0);
+  }
 }
 
-/* 标题 */
-.title {
+/* ====== 标题 ====== */
+.title-wrap {
   text-align: center;
-  font-size: 22px;
-  color: #4a9be6;
-  font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-/* 网格 */
+.title {
+  font-size: 22px;
+  color: #2f7fd1;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #8aa6c6;
+}
+
+/* ====== 网格区域 ====== */
+.grid-wrap {
+  padding: 12px 10px 10px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #dbefff 0%, #f6fbff 45%, #dbefff 100%);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  border: 2px solid #4a9be6;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px #bcd9ff;
 }
 
-/* 外圈格子 */
+/* 外圈格子样式 */
 .cell {
-  border: 1px solid #cfe8ff;
-  height: 60px;
+  border: 1px solid #e0edff;
+  height: 62px;
   display: flex;
-  align-items:center;
-  justify-content:center;
-  background: white;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
   font-size: 14px;
   text-align: center;
+  color: #325078;
+  padding: 0 4px;
   transition: all 0.15s ease-out;
 }
 
-/* 中间 2×2 兔兔 */
+/* 中间 2×2 小蛇 */
 .center-emoji {
   grid-column: span 2;
   grid-row: span 2;
@@ -73,69 +110,129 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 70px;
-  background: white;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
 }
 
-/* 高亮格子：旋转+闪光 */
+/* 小蛇轻微浮动动画 */
+.center-emoji span {
+  display: inline-block;
+  animation: floatSnake 2s ease-in-out infinite;
+}
+
+@keyframes floatSnake {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* 高亮格子：旋转 + 灯光闪 */
 .flash {
-  background: #fff3b0 !important;
-  border-color: #ffd35b;
+  background: #ffeeb0 !important;
+  border-color: #ffcf5e;
+  color: #9c5a00;
+  font-weight: 700;
   animation: flashSpin 0.35s ease-out infinite;
 }
+
 @keyframes flashSpin {
-  0%   { transform: scale(1) rotate(0deg);   box-shadow: 0 0 0 rgba(255,228,122,0); }
-  50%  { transform: scale(1.12) rotate(4deg); box-shadow: 0 0 12px rgba(255,228,122,0.9); }
-  100% { transform: scale(1) rotate(0deg);   box-shadow: 0 0 0 rgba(255,228,122,0); }
+  0% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 0 rgba(255, 209, 96, 0);
+  }
+  50% {
+    transform: scale(1.12) rotate(4deg);
+    box-shadow: 0 0 14px rgba(255, 209, 96, 0.9);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 0 rgba(255, 209, 96, 0);
+  }
 }
 
-/* 按钮 */
+/* ====== 按钮 ====== */
 .button {
   margin-top: 18px;
   width: 100%;
-  background: #4a9be6;
-  color: white;
+  background: linear-gradient(135deg, #3d8df0, #1f6ed8);
+  color: #ffffff;
   border: none;
-  padding: 12px;
-  border-radius: 14px;
-  font-size: 17px;
+  padding: 13px;
+  border-radius: 999px;
+  font-size: 16px;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 16px rgba(38, 114, 214, 0.32);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
 }
+
 .button:disabled {
-  opacity: 0.7;
+  opacity: 0.8;
+  cursor: default;
+  box-shadow: 0 4px 10px rgba(38, 114, 214, 0.2);
+}
+
+.button:not(:disabled):active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 4px 10px rgba(38, 114, 214, 0.2);
+}
+
+/* ====== 结果显示 ====== */
+.result {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #567199;
+  text-align: center;
+}
+
+.result span {
+  color: #e46a2e;
+  font-weight: 700;
 }
 </style>
 </head>
 <body>
-
 <div class="card" id="card">
-  <div class="title">跟娄莉吵架的惩罚</div>
+  <div class="title-wrap">
+    <div class="title">跟娄莉吵架的惩罚</div>
+    <div class="subtitle">至少要转两圈，小蛇选一个结局给你 🐍</div>
+  </div>
 
-  <div class="grid">
+  <div class="grid-wrap">
+    <div class="grid">
+      <!-- 第一行 -->
+      <div class="cell">吃好吃的</div>        <!-- 0 -->
+      <div class="cell">买零食</div>          <!-- 1 -->
+      <div class="cell">朋友圈道歉</div>      <!-- 2 -->
+      <div class="cell">任选一个</div>        <!-- 3 -->
 
-    <!-- 第 1 行 -->
-    <div class="cell">吃好吃的</div>         <!-- 0 -->
-    <div class="cell">买零食</div>           <!-- 1 -->
-    <div class="cell">朋友圈道歉</div>       <!-- 2 -->
-    <div class="cell">任选一个</div>         <!-- 3 -->
+      <!-- 第二行 -->
+      <div class="cell">喝奶茶</div>          <!-- 4 -->
+      <div class="center-emoji"><span>🐍</span></div>
+      <div class="cell">转账52元</div>        <!-- 5 -->
 
-    <!-- 第 2 行 -->
-    <div class="cell">喝奶茶</div>           <!-- 4 -->
-    <div class="center-emoji">🐰</div>
-    <div class="cell">转账52元</div>         <!-- 5 -->
+      <!-- 第三行 -->
+      <div class="cell">小零食礼包</div>      <!-- 6 -->
+      <div class="cell">买新衣服</div>        <!-- 7 -->
 
-    <!-- 第 3 行 -->
-    <div class="cell">零食</div>       <!-- 6 -->
-    <div class="cell">买衣服</div>         <!-- 7 -->
-
-    <!-- 第 4 行 -->
-    <div class="cell">再来一次</div>         <!-- 8 -->
-    <div class="cell">唱征服</div>       <!-- 9 -->
-    <div class="cell">打屁股</div>       <!--10 -->
-    <div class="cell">全部来一遍！</div>     <!--11 -->
-
+      <!-- 第四行 -->
+      <div class="cell">再来一次</div>        <!-- 8 -->
+      <div class="cell">跪下唱征服</div>      <!-- 9 -->
+      <div class="cell">打屁股52下</div>      <!-- 10 -->
+      <div class="cell">全部来一遍！</div>    <!-- 11 -->
+    </div>
   </div>
 
   <button class="button" id="btn" onclick="start()">随机抽一个惩罚</button>
+  <div class="result" id="result">小蛇还在思考，先试着转一次看看吧。</div>
 </div>
 
 <script>
@@ -145,64 +242,63 @@ function start() {
   if (spinning) return;
   spinning = true;
 
-  const card = document.getElementById('card');
-  const btn  = document.getElementById('btn');
-  const allCells = document.querySelectorAll('.cell');
+  const card = document.getElementById("card");
+  const btn = document.getElementById("btn");
+  const resultEl = document.getElementById("result");
+  const allCells = document.querySelectorAll(".cell");
 
   // .cell 顺序：
-  // 0 吃好吃的      1 买零食       2 朋友圈道歉    3 任选一个
-  // 4 喝奶茶        5 转账52元
-  // 6 小零食礼包    7 买新衣服
-  // 8 再来一次      9 跪下唱征服    10 打屁股52下   11 全部来一遍！
+  // 0 吃好吃的  1 买零食  2 朋友圈道歉  3 任选一个
+  // 4 喝奶茶    5 转账52元
+  // 6 小零食礼包 7 买新衣服
+  // 8 再来一次  9 跪下唱征服 10 打屁股52下 11 全部来一遍！
   //
   // 外圈顺时针：上 → 右 → 下 → 左
-  const orderIndex = [
-    0, 1, 2, 3,   // 上
-    5, 7,         // 右
-    11,10,9,8,    // 下
-    6,4           // 左
-  ];
+  const orderIndex = [0, 1, 2, 3, 5, 7, 11, 10, 9, 8, 6, 4];
+  const cells = orderIndex.map((i) => allCells[i]);
+  const n = cells.length; // 12
 
-  const cells = orderIndex.map(i => allCells[i]);
-
-  // 清空旧高亮
-  cells.forEach(c => c.classList.remove('flash'));
+  cells.forEach((c) => c.classList.remove("flash"));
   btn.disabled = true;
-  btn.textContent = '抽奖中…';
-  card.classList.add('spinning');
+  btn.textContent = "小蛇正在思考…";
+  card.classList.add("spinning");
+  resultEl.textContent = "小蛇在盘算今天该怎么收拾你…";
 
-  const n = cells.length;               // 一圈 12 格
+  // 随机圈数：2～4圈
   const laps = 2 + Math.floor(Math.random() * 3);
-  // laps = 2,3,4，至少两圈，多的时候会转到你怀疑人生😂
-
-  const extra = Math.floor(Math.random() * n); // 额外多转 0~11 格
-  const totalSteps = laps * n + extra;         // 总步数 = 多圈 + 随机偏移
+  // 再额外随机 0～11 格，确保结果均匀随机
+  const extra = Math.floor(Math.random() * n);
+  const totalSteps = laps * n + extra;
 
   let step = 0;
-  let index = 0;
+  let current = 0;
 
   function spin() {
-    cells.forEach(c => c.classList.remove('flash'));
-    cells[index].classList.add('flash');
+    // 清除所有闪光
+    cells.forEach((c) => c.classList.remove("flash"));
+    // 当前格子高亮
+    cells[current].classList.add("flash");
 
-    step++;
-
+    // 如果已经走完全部步数，这一格就是结果
     if (step >= totalSteps) {
-      // 结束时当前这个格子就是随机结果
-      spinning = false;
+      const text = cells[current].textContent.trim();
       btn.disabled = false;
-      btn.textContent = '随机抽一个惩罚';
-      card.classList.remove('spinning');
+      btn.textContent = "再转一次";
+      card.classList.remove("spinning");
+      resultEl.innerHTML = `这次小蛇选的是：<span>${text}</span>`;
+      spinning = false;
       return;
     }
 
-    index = (index + 1) % n;
+    step++;
+    current = (current + 1) % n;
 
-    // 先快后慢
+    // 先快后慢：越接近 totalSteps 越慢
     const progress = step / totalSteps; // 0~1
-    const minDelay = 50;
+    const minDelay = 45;
     const maxDelay = 260;
-    const delay = minDelay + (maxDelay - minDelay) * (progress * progress);
+    const delay =
+      minDelay + (maxDelay - minDelay) * Math.pow(progress, 2.2);
 
     setTimeout(spin, delay);
   }
@@ -210,6 +306,5 @@ function start() {
   spin();
 }
 </script>
-
 </body>
 </html>
