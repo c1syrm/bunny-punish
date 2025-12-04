@@ -231,7 +231,7 @@ body {
   </div>
 
   <button class="button" id="btn" onclick="start()">随机抽一个惩罚</button>
-  <div class="result" id="result">小蛇还在思考，先试着转一次看看吧。</div>
+  <div class="result" id="result">娄莉还在思考，先试着转一次看看吧。</div>
 </div>
 
 <script>
@@ -259,9 +259,9 @@ function start() {
 
   cells.forEach((c) => c.classList.remove("flash"));
   btn.disabled = true;
-  btn.textContent = "小蛇正在思考…";
+  btn.textContent = "娄莉正在思考…";
   card.classList.add("spinning");
-  resultEl.textContent = "小蛇在盘算今天该怎么收拾你…";
+  resultEl.textContent = "娄莉在盘算今天该怎么收拾你…";
 
   // 随机圈数：2～4圈
   const laps = 2 + Math.floor(Math.random() * 3);
